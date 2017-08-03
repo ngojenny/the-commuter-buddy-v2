@@ -2,14 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>The Commuter Buddy</title>
+    <link href='https://fonts.googleapis.com/css?family=Carrois+Gothic+SC|Londrina+Solid' rel='stylesheet' type='text/css'>
+	<link type="image/png" href="images/favicon.png" rel="icon">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/animatecss/3.5.2/animate.min.css">
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
     <!--HEADER BEGINS-->
     <header id="prompt">
-        
+        <div class="wrapper header-wrapper">
+			<h1>
+				<span class="smallerHead smallerHeadLeft">The</span> 
+				commuter
+				<span class="smallerHead smallerHeadRight">buddy</span>
+			</h1>
+			<h2>The Commuter Buddy will calculate your commute time and generate a customized playlist you can listen to from start to finish</h2>
+			<div class="animateCarPath">
+				<img src="images/car.svg" alt="Half of Car appearing on the left of browser">
+			</div>
+			<div class="notesAnimation notesAnimationCar1">
+				<img src="images/note1.svg" alt="Musical Notes animating bottom to top relative to the Half Car">
+			</div>
+			<div class="notesAnimation notesAnimationCar2">
+				<img src="images/note2.svg" alt="Musical Notes animating bottom to top relative to the Half Car">
+			</div>
+
+			<div class="animateBusStop">
+				<img src="images/busStop.svg" alt="Half of Bus appearing on the right of Browser">
+			</div>
+			<div class="notesAnimation notesAnimationBus1">
+				<img src="images/note1.svg" alt="Musical Notes animating bottom to top relative to the Half Car">
+			</div>
+			<div class="notesAnimation notesAnimationBus2">
+				<img src="images/note2.svg" alt="Musical Notes animating bottom to top relative to the Half Car">
+			</div>
+            <div id='login'>
+			    <a id="loginBtn" href="/login" class="btn animated infinite pulse">Log in to Spotify <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
+			    <p class="userMessage">*To use The Commuter Buddy, you must login to Spotify. To create a free account, <a href="https://www.spotify.com/us/">click here</a></p>
+            </div>
+
+            <!--<div>
+			    <a href="#userInput" class="btn animated infinite pulse">Let's get started <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
+			    <p class="userMessage">*To use The Commuter Buddy, you must login to Spotify. To create a free account, <a href="https://www.spotify.com/us/">click here</a></p>
+            </div>-->
+			
+		</div>
     </header>
+    <!--<div id="loggedin">
+        <div id="user-profile">
+        </div>
+        <div id="oauth">
+        </div>
+        <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
+      </div>-->
 
     <!--COMMUTE CACULATOR BEGINS-->
     <section id='commuteCalculator'>
@@ -36,13 +82,9 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
     <!--links to templates-->
-    <script id="welcome" type="x-handlebars-template">
-        <p>{{name}}</p>
-    </script>
     <!--<script id="authorized" type="x-handlebars-template">
         <p>{{name}}</p>
     </script>-->
-
     <script src="scripts/main.js"></script>
 </body>
 </html>
