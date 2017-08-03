@@ -6,11 +6,43 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <header>
-        <h1>test</h1>
-        <h2>test2 <span>testingspan</span></h2>
+    <!--HEADER BEGINS-->
+    <header id="prompt">
+        
     </header>
+
+    <!--COMMUTE CACULATOR BEGINS-->
+    <section id='commuteCalculator'>
+
+    </section>
+
+    <!--PLAYLIST GENERATOR BEGINS-->
+    <section id='playlistGenerator'>
+
+    </section>
+    <section id='results'>
+
+    </section>
+
+    <!--FOOTER BEGINS-->
+    <footer>
+
+    </footer>
     <!--links to scripts-->
+    <script
+        src="http://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+    <!--links to templates-->
+    <script id="welcome" type="x-handlebars-template">
+        <p>{{name}}</p>
+    </script>
+    <!--<script id="authorized" type="x-handlebars-template">
+        <p>{{name}}</p>
+    </script>-->
+
     <script src="scripts/main.js"></script>
 </body>
 </html>
