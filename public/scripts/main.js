@@ -1,18 +1,11 @@
 'use strict';
 
-// console.log('helloo world')
-// var myTemplate = $('#welcome').html();
-// var template = Handlebars.compile(myTemplate);
-// var person = {
-//     name: 'Joe Smith'
-// };
-
-// var personTemplate = template(person);
-// $('#prompt').append(personTemplate);
 var commuterApp = {};
 var accessToken = void 0;
 
-commuterApp.init = function () {
+// SET ACCESS TOKEN FOR SPOTIFY
+
+commuterApp.getTokenObj = function () {
     commuterApp.directSpotify();
 };
 
@@ -46,17 +39,66 @@ commuterApp.directSpotify = function () {
     window.location = url;
 };
 
+commuterApp.setToken = function () {
+    var hashParams = {};
+    var e = void 0;
+    var r = /([^&;=]+)=?([^&;]*)/g;
+    var q = window.location.hash.substring(1);
+    while (e = r.exec(q)) {
+        hashParams[e[1]] = decodeURIComponent(e[2]);
+    }
+    return hashParams;
+};
+
+commuterApp.callGoogle = function () {
+    console.log('call google');
+};
+
 $(document).ready(function () {
     // greetUser()
+
+    var params = commuterApp.setToken();
+    accessToken = params.access_token;
+    var state = params.state;
+    var stateKey = 'spotify_auth_state';
+    var storedState = localStorage.getItem(stateKey);
+
+    var loggedInTemplate = $('#loggedInTemplate').html();
+    var template = Handlebars.compile(loggedInTemplate);
+
+    console.log('accessToken', accessToken, 'state', state, 'storedState', storedState);
+
+    if (accessToken && (state == null || state !== storedState)) {
+        alert('There was an error during the authentication');
+    } else {
+        // localStorage.removeItem(stateKey);
+        if (accessToken) {
+            $.ajax({
+                url: 'https://api.spotify.com/v1/me',
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken
+                },
+                success: function success(response) {
+                    console.log('response', response);
+                    var loggedInTemplateUser = template(response);
+                    $('#login').hide();
+                    $('#loggedIn').show();
+                    $('#loggedIn').append(loggedInTemplateUser);
+                }
+            });
+        } else {
+            $('#login').show();
+            $('#loggedIn').hide();
+        }
+    }
+
     $('#loginBtn').on('click', function (e) {
         e.preventDefault();
-        commuterApp.init();
+        commuterApp.getTokenObj();
     });
-    // searchItem.init();
 
-
-    //smoothscroll
-    // $('a.btn').smoothScroll({
-    // 	speed: 400
-    // });
+    $('#userInput').on('click', function (e) {
+        e.preventDefault();
+        commuterApp.callGoogle();
+    });
 });

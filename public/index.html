@@ -41,11 +41,8 @@
 			    <a id="loginBtn" href="/login" class="btn animated infinite pulse">Log in to Spotify <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
 			    <p class="userMessage">*To use The Commuter Buddy, you must login to Spotify. To create a free account, <a href="https://www.spotify.com/us/">click here</a></p>
             </div>
-
-            <!--<div>
-			    <a href="#userInput" class="btn animated infinite pulse">Let's get started <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
-			    <p class="userMessage">*To use The Commuter Buddy, you must login to Spotify. To create a free account, <a href="https://www.spotify.com/us/">click here</a></p>
-            </div>-->
+            <div id='loggedIn'>
+            </div>
 			
 		</div>
     </header>
@@ -82,9 +79,10 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
     <!--links to templates-->
-    <!--<script id="authorized" type="x-handlebars-template">
-        <p>{{name}}</p>
-    </script>-->
+    <script id="loggedInTemplate" type="x-handlebars-template">
+        <a href="#userInput" class="btn animated infinite pulse">Let's get started <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
+	    <p class="userMessage">You are logged in as {{id}}</p>
+    </script>
     <script src="scripts/main.js"></script>
 </body>
 </html>

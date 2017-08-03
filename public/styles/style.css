@@ -179,6 +179,9 @@ a {
   border-radius: 5px;
   padding: 10px; }
 
+#login, #loggedIn {
+  display: none; }
+
 header {
   position: relative;
   background-color: #60DDAD;
