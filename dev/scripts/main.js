@@ -53,27 +53,26 @@ commuterApp.greetUser = () => {
     const today = new Date();
     //if local time is between 5am to 11:59 am print "Good Morning! Hope you have a lovely early commute"
     const todayHour = today.getHours();
-    let printGreet;
+    let greetMarkup;
 
     if (todayHour >= 5 && todayHour < 12) {
-        printGreet = $('<h3>').text('Good Morning! Hope you have a lovely early commute.');
+        greetMarkup = `<h3>Good Morning! Hope you have a lovely early commute.</h3>`
     }
     //else if local time is between 12pm to  4:59pm print "Good afternoon! Hope you have a great commute"
     else if (todayHour >= 12 && todayHour < 17) {
-        printGreet = $('<h3>').text('Good afternoon! Hope you have a great commute.');
+        greetMarkup = `<h3>Good afternoon! Hope you have a great commute.</h3>`
 
     }
     //if local time is between 5pm to 4:59am print "Good Evening! Hope you have a safe commute!" 
     else {
-        printGreet = $('<h3>').text('Good Evening! Hope you have a safe commute.');
+        greetMarkup = `<h3>Good Evening! Hope you have a safe commute.</h3>`
     }
-    $('.greeting').append(printGreet);
+    $('.greeting').append(greetMarkup);
 }
 
 // TAKE USER INPUT AND CALCULATE COMMUTE TIME
 commuterApp.getCommuteData = (start, end, mode) => {
     console.log('call google', start, end, mode)
-    const key = 'AIzaSyBOycu2FIPU5XuhpYz2eCIlEgCMnrSropk';
     const service = new google.maps.DistanceMatrixService();
     console.log('distanceSerice', service)
 
@@ -83,18 +82,33 @@ commuterApp.getCommuteData = (start, end, mode) => {
     destinations: [end],
     travelMode: mode.toUpperCase(),
 
-  }, commuterApp.parseCommuteData);
+  }, commuterApp.handleCommuteData);
 }
 
-commuterApp.parseCommuteData = (res, stat) => {
-    console.log('did this actually wwork', res, stat)
+commuterApp.handleCommuteData = (res, stat) => {
+    if(stat !== 'OK') {
+        console.log('there was an error')
+    } else {
+        const durationText = res.rows[0].elements[0].duration.text;
+        let durationVal = res.rows[0].elements[0].duration.value;
+        // convert durationVal to milliseconds to use for later
+        commuterApp.commuteTime = Math.round(durationVal * 1000);
+        console.log('commutertime', commuterApp.commuteTime);
+
+        const timeResultMarkup = `
+        <div class="commuteTimeResults">
+            <p class="commuteTimeMin">Your commute will take ${durationText}</p>
+        </div>` 
+
+	    $('.commuteTimeResults').remove();
+	    $('.userInput .calculateCommuterTime').append(timeResultMarkup);
+        //make .createPlaylist appear
+	    $('.createPlaylist').addClass('show');
+    }
 }
 
 
 $(document).ready(function () {
-    // greetUser()
-    
-    console.log('how many times are you called')
     const params = commuterApp.setToken();
     accessToken = params.access_token;
     const state = params.state;
@@ -121,8 +135,8 @@ $(document).ready(function () {
                     const loggedInTemplateUser = template(response);
                     $('#login').hide();
                     $('#loggedIn').show();
-                    $('footer, #commuteCalculator').removeClass('show');
-                    $('footer, #commuteCalculator').addClass('show');
+                    $('footer, #userInput').removeClass('show');
+                    $('footer, #userInput').addClass('show');
                     $('#loggedIn').append(loggedInTemplateUser);
                     commuterApp.greetUser();
                 },
@@ -136,6 +150,7 @@ $(document).ready(function () {
         }
     }
 
+    // listen for user events
 
     $('#loginBtn').on('click', (e) => {
         e.preventDefault();
@@ -149,5 +164,12 @@ $(document).ready(function () {
         const mode = $('input[type=radio]:checked').val();
         commuterApp.getCommuteData(startLoc, endLoc, mode);
     })
+
+    $('.createPlaylist input[type=checkbox]').on('change', function(e) {
+        // need to find a better solution
+        if($(this).siblings(':checked').length >= 5){
+            this.checked = false;
+        }
+    });
 
 });

@@ -142,13 +142,6 @@ legend, button::-moz-focus-inner, input::-moz-focus-inner {
 img {
   max-width: 100%; }
 
-/* INITIAL HIDE */
-footer, #commuteCalculator {
-  display: none; }
-
-footer.show, #commuteCalculator.show {
-  display: block; }
-
 /* GENERAL TYPOGRAPHY STYLES*/
 html {
   font-size: 62.5%; }
@@ -324,6 +317,22 @@ header {
     opacity: 0;
     right: 0; } }
 
+/* INITIAL HIDE */
+footer, #userInput {
+  display: none; }
+
+footer.show, #userInput.show {
+  display: block; }
+
+.createPlaylist {
+  display: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s; }
+
+.createPlaylist.show {
+  display: block; }
+
+/* SPECIFIC USER INPUT */
 .userInput {
   background-color: #5DAEE6;
   padding: 50px;
@@ -407,14 +416,6 @@ fieldset {
   color: #ffffff;
   border: 2px solid #ffffff;
   text-align: center; }
-
-.createPlaylist {
-  display: none;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s; }
-
-.createPlaylist.show {
-  display: block; }
 
 .customizedPlaylist {
   position: relative;

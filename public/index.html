@@ -48,8 +48,9 @@
     </header>
 
     <!--COMMUTE CACULATOR BEGINS-->
-    <section id="commuteCalculator" class="userInput">
-        <div class="wrapper">
+    <!-- USER INPUT SECTION BEGINS -->
+	<section class="userInput" id="userInput">
+		<div class="wrapper">
 		<div class="greeting"></div>	
 			<form action="" class="calculateCommuterTime">
 				<p class="instructions">Please enter your start and end address (e.g. 483 Queen St West Toronto ON).</p>
@@ -70,16 +71,75 @@
 						<i class="fa fa-car" aria-hidden="true"></i>
 					</label>
 
+					<!-- <input type="radio" name="mode" value="bicycling" id="bicycling">
+					<label for="bicycling">Bicycling
+						<i class="fa fa-bicycle" aria-hidden="true"></i>
+					</label> -->
+
 					<input type="radio" name="mode" value="transit" id="transit">
 					<label for="transit">Transit
 						<i class="fa fa-bus" aria-hidden="true"></i>
 					</label>
 
-					<input id="calculateCommuteBtn" type="submit" value="calculate my commute time">
+					<input type="submit" id='calculateCommuteBtn'>
 				</fieldset>
 			</form>
-        </div>
-    </section>
+
+			<!-- PLAYLIST FORM STARTS -->
+			<form action="" class="createPlaylist">
+				<p class="instruction">Please select up to 5 genres!</p>
+
+				<fieldset>
+					
+				<input type="checkbox" name="genre" value="pop" id="pop">
+				<label for="pop">Pop</label>
+
+				<input type="checkbox" name="genre" value="rock" id="rock">
+				<label for="rock">Rock</label>
+
+				<input type="checkbox" name="genre" value="hipHop" id="hipHop">
+				<label for="hipHop">Hip-Hop</label>
+
+				<input type="checkbox" name="genre" value="rap" id="rap">
+				<label for="rap">Rap</label>
+
+				<input type="checkbox" name="genre" value="popRap" id="popRap">
+				<label for="popRap">Pop Rap</label>
+
+				<input type="checkbox" name="genre" value="r&b" id="r&b">
+				<label for="r&b">R&B</label>
+
+				<input type="checkbox" name="genre" value="country" id="country">
+				<label for="country">Country</label>
+				
+				<input type="checkbox" name="genre" value="blues" id="blues">
+				<label for="blues">Blues</label>
+
+				<input type="checkbox" name="genre" value="jazz" id="jazz">
+				<label for="jazz">Jazz</label>
+
+				<input type="checkbox" name="genre" value="classical" id="classical">
+				<label for="classical">Classical</label>
+					
+				<input type="checkbox" name="genre" value="indiePop" id="indiePop">
+				<label for="indiePop">Indie Pop</label>
+
+				<input type="checkbox" name="genre" value="indieRock" id="indieRock">
+				<label for="indieRock">Indie Rock</label>
+
+				<input type="checkbox" name="genre" value="folk" id="folk">
+				<label for="folk">Folk</label>
+
+				<input type="checkbox" name="genre" value="edm" id="edm">
+				<label for="edm">EDM</label>
+				
+				<input type="submit" value ="make me my playlist">
+
+				</fieldset>
+
+			</form>
+		</div> <!-- /.wrapper -->
+	</section>
 
     <!--PLAYLIST GENERATOR BEGINS-->
     <section id='playlistGenerator'>
