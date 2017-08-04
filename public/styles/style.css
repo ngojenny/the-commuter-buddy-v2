@@ -142,6 +142,13 @@ legend, button::-moz-focus-inner, input::-moz-focus-inner {
 img {
   max-width: 100%; }
 
+/* INITIAL HIDE */
+footer, #commuteCalculator {
+  display: none; }
+
+footer.show, #commuteCalculator.show {
+  display: block; }
+
 /* GENERAL TYPOGRAPHY STYLES*/
 html {
   font-size: 62.5%; }

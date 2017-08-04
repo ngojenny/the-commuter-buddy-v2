@@ -46,17 +46,39 @@
 			
 		</div>
     </header>
-    <!--<div id="loggedin">
-        <div id="user-profile">
-        </div>
-        <div id="oauth">
-        </div>
-        <button class="btn btn-default" id="obtain-new-token">Obtain new token using the refresh token</button>
-      </div>-->
 
     <!--COMMUTE CACULATOR BEGINS-->
-    <section id='commuteCalculator'>
+    <section id="commuteCalculator" class="userInput">
+        <div class="wrapper">
+		<div class="greeting"></div>	
+			<form action="" class="calculateCommuterTime">
+				<p class="instructions">Please enter your start and end address (e.g. 483 Queen St West Toronto ON).</p>
+				<label class="simple" for="origin_addresses">Start</label>
+				<input type="text" name="origin_addresses" placeholder="Please enter your start location">
+				<label class="simple" for="destination_addresses">End</label>
+				<input type="text" name="destination_addresses" placeholder="Please enter your end location">
 
+				<p>What is your mode of transportation?</p>
+				<fieldset>
+					<input type="radio" name="mode" value="walking" id="walking" checked>
+					<label for="walking">Walking
+						<i class="fa fa-male" aria-hidden="true"></i>
+					</label>
+
+					<input type="radio" name="mode" value="driving" id="driving">
+					<label for="driving">Driving 
+						<i class="fa fa-car" aria-hidden="true"></i>
+					</label>
+
+					<input type="radio" name="mode" value="transit" id="transit">
+					<label for="transit">Transit
+						<i class="fa fa-bus" aria-hidden="true"></i>
+					</label>
+
+					<input id="calculateCommuteBtn" type="submit" value="calculate my commute time">
+				</fieldset>
+			</form>
+        </div>
     </section>
 
     <!--PLAYLIST GENERATOR BEGINS-->
@@ -78,6 +100,7 @@
         crossorigin="anonymous">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCLJ08ZwZQxt2drHuOAAbkQCAo8qzSlsE"></script>
     <!--links to templates-->
     <script id="loggedInTemplate" type="x-handlebars-template">
         <a href="#userInput" class="btn animated infinite pulse">Let's get started <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>

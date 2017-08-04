@@ -50,13 +50,50 @@ commuterApp.setToken = function () {
     return hashParams;
 };
 
-commuterApp.callGoogle = function () {
-    console.log('call google');
+// HANDLES USER GREETING IN COMMUTE CALCULATOR SECTION
+commuterApp.greetUser = function () {
+    var today = new Date();
+    //if local time is between 5am to 11:59 am print "Good Morning! Hope you have a lovely early commute"
+    var todayHour = today.getHours();
+    var printGreet = void 0;
+
+    if (todayHour >= 5 && todayHour < 12) {
+        printGreet = $('<h3>').text('Good Morning! Hope you have a lovely early commute.');
+    }
+    //else if local time is between 12pm to  4:59pm print "Good afternoon! Hope you have a great commute"
+    else if (todayHour >= 12 && todayHour < 17) {
+            printGreet = $('<h3>').text('Good afternoon! Hope you have a great commute.');
+        }
+        //if local time is between 5pm to 4:59am print "Good Evening! Hope you have a safe commute!" 
+        else {
+                printGreet = $('<h3>').text('Good Evening! Hope you have a safe commute.');
+            }
+    $('.greeting').append(printGreet);
+};
+
+// TAKE USER INPUT AND CALCULATE COMMUTE TIME
+commuterApp.getCommuteData = function (start, end, mode) {
+    console.log('call google', start, end, mode);
+    var key = 'AIzaSyBOycu2FIPU5XuhpYz2eCIlEgCMnrSropk';
+    var service = new google.maps.DistanceMatrixService();
+    console.log('distanceSerice', service);
+
+    service.getDistanceMatrix({
+        origins: [start],
+        destinations: [end],
+        travelMode: mode.toUpperCase()
+
+    }, commuterApp.parseCommuteData);
+};
+
+commuterApp.parseCommuteData = function (res, stat) {
+    console.log('did this actually wwork', res, stat);
 };
 
 $(document).ready(function () {
     // greetUser()
 
+    console.log('how many times are you called');
     var params = commuterApp.setToken();
     accessToken = params.access_token;
     var state = params.state;
@@ -79,11 +116,17 @@ $(document).ready(function () {
                     'Authorization': 'Bearer ' + accessToken
                 },
                 success: function success(response) {
-                    console.log('response', response);
+                    console.log('response successful', response);
                     var loggedInTemplateUser = template(response);
                     $('#login').hide();
                     $('#loggedIn').show();
+                    $('footer, #commuteCalculator').removeClass('show');
+                    $('footer, #commuteCalculator').addClass('show');
                     $('#loggedIn').append(loggedInTemplateUser);
+                    commuterApp.greetUser();
+                },
+                error: function error(err) {
+                    console.log('there was an error');
                 }
             });
         } else {
@@ -97,8 +140,11 @@ $(document).ready(function () {
         commuterApp.getTokenObj();
     });
 
-    $('#userInput').on('click', function (e) {
+    $('#calculateCommuteBtn').on('click', function (e) {
         e.preventDefault();
-        commuterApp.callGoogle();
+        var startLoc = $('input[name=origin_addresses]').val();
+        var endLoc = $('input[name=destination_addresses]').val();
+        var mode = $('input[type=radio]:checked').val();
+        commuterApp.getCommuteData(startLoc, endLoc, mode);
     });
 });
