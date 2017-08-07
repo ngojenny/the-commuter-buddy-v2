@@ -29,7 +29,7 @@ commuterApp.directSpotify = function () {
     var state = commuterApp.generateRandomString(5);
     var stateKey = 'spotify_auth_state';
     localStorage.setItem(stateKey, state);
-    var scope = 'user-read-private user-read-email';
+    var scope = 'user-read-private user-read-email playlist-modify-public playlist-modify-private';
 
     var url = 'https://accounts.spotify.com/authorize';
     url += '?response_type=token';
@@ -106,6 +106,33 @@ commuterApp.handleCommuteData = function (res, stat) {
     }
 };
 
+//CREATE A NEW PLAYLIST
+commuterApp.createPlaylist = function () {
+    console.log('createPlaylist');
+    var userId = commuterApp.userInfo.id;
+    console.log('user', userId);
+    $.ajax({
+        url: 'https://api.spotify.com/v1/users/' + userId + '/playlists',
+        dataType: 'json',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+        },
+        data: JSON.stringify({ name: 'The Commuter Buddy' }),
+        success: function success(res) {
+            console.log('success', res);
+            // store playlistInfo for later
+            commuterApp.playlistInfo = res;
+            commuterApp.collectGenres();
+        },
+        error: function error(err) {
+            console.log('err', err);
+        }
+    });
+};
+
+// collect genres chosen by user; output: array ['pop', 'rock']
 commuterApp.collectGenres = function () {
     var genresElems = [].concat(_toConsumableArray(document.querySelectorAll('.createPlaylist input:checked')));
     console.log('genresElem', genresElems);
@@ -116,6 +143,7 @@ commuterApp.collectGenres = function () {
     commuterApp.getArtists(genres);
 };
 
+// get 20 top artists per genre chosen
 commuterApp.getArtists = function (genres) {
     console.log('about to search', accessToken);
     var getArtists = genres.map(function (genre) {
@@ -130,15 +158,58 @@ commuterApp.getArtists = function (genres) {
             data: {
                 q: 'genre:' + genre,
                 type: 'artist'
+            },
+            success: function success(res) {
+                console.log('success', res);
+            },
+            error: function error(err) {
+                console.log('err', err);
             }
         });
     });
 
     $.when.apply(null, getArtists).then(function (res) {
-        console.log('res', res);
+        // get artists ids
+        var artistsArray = Array.from(arguments);
+        var artistsIds = [];
+
+        if (res.length) {
+            artistsIds = artistsArray.map(function (arr, i) {
+                return arr[0].artists.items;
+            });
+
+            artistsIds = artistsIds.reduce(function (a, b) {
+                return a.concat(b);
+            }, []);
+
+            console.log('randomized', artistsIds.sort(function () {
+                return 0.5 - Math.random();
+            }));
+
+            artistsIds = artistsIds.map(function (arr, i) {
+                return arr.id;
+            });
+        } else {
+            console.log('JUST ONE');
+            artistsIds = artistsArray[0].artists.items.map(function (artist, i) {
+                return artist.id;
+            });
+        }
+
+        console.log('artistsIds', artistsIds);
+
+        // commuterApp.randomizeArtists(artistsIds);
     });
     console.log('getting artists');
 };
+
+// commuterApp.randomizeArtists = (ids) => {
+//     console.log('ids', ids)
+//     const randomizedIds  = ids.sort(() => { return 0.5 - Math.random() })
+//     console.log('randomizedIds', randomizedIds);
+
+// }
+
 
 $(document).ready(function () {
     var params = commuterApp.setToken();
@@ -165,6 +236,9 @@ $(document).ready(function () {
                 success: function success(response) {
                     console.log('response successful', response);
                     var loggedInTemplateUser = template(response);
+
+                    // store userInfo for later
+                    commuterApp.userInfo = response;
                     $('#login').hide();
                     $('#loggedIn').show();
                     $('footer, #userInput').removeClass('show');
@@ -207,6 +281,7 @@ $(document).ready(function () {
     $('form.createPlaylist').on('submit', function (e) {
         e.preventDefault();
         console.log('submitting');
-        commuterApp.collectGenres();
+        // commuterApp.collectGenres();
+        commuterApp.createPlaylist();
     });
 });
