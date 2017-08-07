@@ -1,5 +1,7 @@
 'use strict';
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 var commuterApp = {};
 var accessToken = void 0;
 
@@ -104,6 +106,40 @@ commuterApp.handleCommuteData = function (res, stat) {
     }
 };
 
+commuterApp.collectGenres = function () {
+    var genresElems = [].concat(_toConsumableArray(document.querySelectorAll('.createPlaylist input:checked')));
+    console.log('genresElem', genresElems);
+    var genres = genresElems.map(function (genresElem, i) {
+        return genresElem.value;
+    });
+    console.log('genres', genres);
+    commuterApp.getArtists(genres);
+};
+
+commuterApp.getArtists = function (genres) {
+    console.log('about to search', accessToken);
+    var getArtists = genres.map(function (genre) {
+        return $.ajax({
+            url: 'https://api.spotify.com/v1/search',
+            dataType: 'json',
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + accessToken
+            },
+            data: {
+                q: 'genre:' + genre,
+                type: 'artist'
+            }
+        });
+    });
+
+    $.when.apply(null, getArtists).then(function (res) {
+        console.log('res', res);
+    });
+    console.log('getting artists');
+};
+
 $(document).ready(function () {
     var params = commuterApp.setToken();
     accessToken = params.access_token;
@@ -153,7 +189,7 @@ $(document).ready(function () {
         commuterApp.getTokenObj();
     });
 
-    $('#calculateCommuteBtn').on('click', function (e) {
+    $('form.calculateCommuterTime').on('submit', function (e) {
         e.preventDefault();
         var startLoc = $('input[name=origin_addresses]').val();
         var endLoc = $('input[name=destination_addresses]').val();
@@ -166,5 +202,11 @@ $(document).ready(function () {
         if ($(this).siblings(':checked').length >= 5) {
             this.checked = false;
         }
+    });
+
+    $('form.createPlaylist').on('submit', function (e) {
+        e.preventDefault();
+        console.log('submitting');
+        commuterApp.collectGenres();
     });
 });

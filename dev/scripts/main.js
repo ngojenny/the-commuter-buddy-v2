@@ -107,6 +107,39 @@ commuterApp.handleCommuteData = (res, stat) => {
     }
 }
 
+commuterApp.collectGenres = () => {
+    const genresElems = [...document.querySelectorAll('.createPlaylist input:checked')];
+    console.log('genresElem', genresElems);
+    const genres = genresElems.map((genresElem, i) => {return genresElem.value});
+    console.log('genres', genres);
+    commuterApp.getArtists(genres);
+}
+
+commuterApp.getArtists = (genres) => {
+    console.log('about to search', accessToken)
+    const getArtists = genres.map(function(genre){
+		return $.ajax({
+			url: 'https://api.spotify.com/v1/search',
+			dataType: 'json',
+			method: 'GET',
+			headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + accessToken,
+            },
+			data: {
+				q: 'genre:' + genre,
+				type: 'artist'
+			}
+		});
+	}); 
+
+	$.when.apply(null, getArtists)
+		.then(function(res) {
+			console.log('res', res)
+	});
+    console.log('getting artists');
+}
+
 
 $(document).ready(function () {
     const params = commuterApp.setToken();
@@ -155,21 +188,27 @@ $(document).ready(function () {
     $('#loginBtn').on('click', (e) => {
         e.preventDefault();
         commuterApp.getTokenObj();
-    })
+    });
 
-    $('#calculateCommuteBtn').on('click', (e) => {
+    $('form.calculateCommuterTime').on('submit', (e) => {
         e.preventDefault();
         const startLoc = $('input[name=origin_addresses]').val();
         const endLoc = $('input[name=destination_addresses]').val();
         const mode = $('input[type=radio]:checked').val();
         commuterApp.getCommuteData(startLoc, endLoc, mode);
-    })
+    });
 
     $('.createPlaylist input[type=checkbox]').on('change', function(e) {
         // need to find a better solution
         if($(this).siblings(':checked').length >= 5){
             this.checked = false;
         }
+    });
+
+    $('form.createPlaylist').on('submit', (e) => {
+        e.preventDefault();
+        console.log('submitting');
+        commuterApp.collectGenres();
     });
 
 });
