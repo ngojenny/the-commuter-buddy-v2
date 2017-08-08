@@ -16,7 +16,7 @@ commuterApp.generateRandomString = (length) => {
 // SET ACCESS TOKEN FOR SPOTIFY
 
 commuterApp.getTokenObj = () => {
-    commuterApp.directSpotify()
+    commuterApp.directSpotify();
 }
 
 
@@ -106,6 +106,9 @@ commuterApp.handleCommuteData = (res, stat) => {
         $('.userInput .calculateCommuterTime').append(timeResultMarkup);
         //make .createPlaylist appear
         $('.createPlaylist').addClass('show');
+        $('html, body').animate({
+            scrollTop: $('.createPlaylist').offset().top
+        }, 1000);
     }
 }
 
@@ -283,7 +286,7 @@ commuterApp.displayWidget = () => {
     const playlistId = commuterApp.playlistInfo.id;
     console.log('what else', commuterApp.playlistInfo);
     const userId = commuterApp.userInfo.id;
-    const widgetMarkup = `<iframe src="https://open.spotify.com/embed?uri=spotify:user:${userId}:playlist:${playlistId}" width="300" height="530" frameborder="0" allowtransparency="true"></iframe>`
+    const widgetMarkup = `<iframe src="https://open.spotify.com/embed?uri=spotify:user:${userId}:playlist:${playlistId}" width="300" height="525" frameborder="0" allowtransparency="true"></iframe>`
     const iphoneMarkup = `<img src="images/iphone2.svg" alt="illustration of white iPhone"/>`
 
     $('.spotifyWidget').empty();
@@ -295,7 +298,12 @@ commuterApp.displayWidget = () => {
 	$('.customizedPlaylist .btn').remove();
 	$('.customizedPlaylist .goodbye').remove();
 	$('.customizedPlaylist .wrapper').append(thanksMarkup, refreshButton);
-	$('.customizedPlaylist button').on('click', function(){
+
+    $('html, body').animate({
+        scrollTop: $('.customizedPlaylist').offset().top
+    }, 1000);
+
+	$('.customizedPlaylist button').on('click', () => {
 		location.reload();
 	});
 }
@@ -327,7 +335,6 @@ $(document).ready(function () {
                 success: function (response) {
                     console.log('response successful', response)
                     const loggedInTemplateUser = template(response);
-
                     // store userInfo for later
                     commuterApp.userInfo = response;
                     $('#login').hide();
@@ -336,6 +343,13 @@ $(document).ready(function () {
                     $('footer, #userInput').addClass('show');
                     $('#loggedIn').append(loggedInTemplateUser);
                     commuterApp.greetUser();
+
+                    $('#getStarted').on('click', (e) => {
+                        e.preventDefault();
+                        $('html, body').animate({
+                            scrollTop: $('#userInput').offset().top
+                        }, 1000);
+                    })
                 },
                 error: function (err) {
                     console.log('there was an error');

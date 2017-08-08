@@ -1,168 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>The Commuter Buddy</title>
     <link href='https://fonts.googleapis.com/css?family=Carrois+Gothic+SC|Londrina+Solid' rel='stylesheet' type='text/css'>
-	<link type="image/png" href="images/favicon.png" rel="icon">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/animatecss/3.5.2/animate.min.css">
+    <link type="image/png" href="images/favicon.png" rel="icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/animatecss/3.5.2/animate.min.css">
     <link rel="stylesheet" href="styles/style.css">
 </head>
+
 <body>
     <!--HEADER BEGINS-->
     <header id="prompt">
         <div class="wrapper header-wrapper">
-			<h1>
-				<span class="smallerHead smallerHeadLeft">The</span> 
-				commuter
-				<span class="smallerHead smallerHeadRight">buddy</span>
-			</h1>
-			<h2>The Commuter Buddy will calculate your commute time and generate a customized playlist you can listen to from start to finish</h2>
-			<div class="animateCarPath">
-				<img src="images/car.svg" alt="Half of Car appearing on the left of browser">
-			</div>
-			<div class="notesAnimation notesAnimationCar1">
-				<img src="images/note1.svg" alt="Musical Notes animating bottom to top relative to the Half Car">
-			</div>
-			<div class="notesAnimation notesAnimationCar2">
-				<img src="images/note2.svg" alt="Musical Notes animating bottom to top relative to the Half Car">
-			</div>
+            <h1>
+                <span class="smallerHead smallerHeadLeft">The</span> commuter
+                <span class="smallerHead smallerHeadRight">buddy</span>
+            </h1>
+            <h2>The Commuter Buddy will calculate your commute time and generate a customized playlist you can listen to from
+                start to finish</h2>
+            <div class="animateCarPath">
+                <img src="images/car.svg" alt="Half of Car appearing on the left of browser">
+            </div>
+            <div class="notesAnimation notesAnimationCar1">
+                <img src="images/note1.svg" alt="Musical Notes animating bottom to top relative to the Half Car">
+            </div>
+            <div class="notesAnimation notesAnimationCar2">
+                <img src="images/note2.svg" alt="Musical Notes animating bottom to top relative to the Half Car">
+            </div>
 
-			<div class="animateBusStop">
-				<img src="images/busStop.svg" alt="Half of Bus appearing on the right of Browser">
-			</div>
-			<div class="notesAnimation notesAnimationBus1">
-				<img src="images/note1.svg" alt="Musical Notes animating bottom to top relative to the Half Car">
-			</div>
-			<div class="notesAnimation notesAnimationBus2">
-				<img src="images/note2.svg" alt="Musical Notes animating bottom to top relative to the Half Car">
-			</div>
+            <div class="animateBusStop">
+                <img src="images/busStop.svg" alt="Half of Bus appearing on the right of Browser">
+            </div>
+            <div class="notesAnimation notesAnimationBus1">
+                <img src="images/note1.svg" alt="Musical Notes animating bottom to top relative to the Half Car">
+            </div>
+            <div class="notesAnimation notesAnimationBus2">
+                <img src="images/note2.svg" alt="Musical Notes animating bottom to top relative to the Half Car">
+            </div>
             <div id='login'>
-			    <a id="loginBtn" href="/login" class="btn animated infinite pulse">Log in to Spotify <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
-			    <p class="userMessage">*To use The Commuter Buddy, you must login to Spotify. To create a free account, <a href="https://www.spotify.com/us/">click here</a></p>
+                <a id="loginBtn" href="/login" class="btn animated infinite pulse">Log in to Spotify <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
+                <p class="userMessage">*To use The Commuter Buddy, you must login to Spotify. To create a free account, <a href="https://www.spotify.com/us/">click here</a></p>
             </div>
             <div id='loggedIn'>
             </div>
-			
-		</div>
+
+        </div>
     </header>
 
     <!--COMMUTE CACULATOR BEGINS-->
     <!-- USER INPUT SECTION BEGINS -->
-	<section class="userInput" id="userInput">
-		<div class="wrapper">
-		<div class="greeting"></div>	
-			<form action="" class="calculateCommuterTime">
-				<p class="instructions">Please enter your start and end address (e.g. 483 Queen St West Toronto ON).</p>
-				<label class="simple" for="origin_addresses">Start</label>
-				<input type="text" name="origin_addresses" placeholder="Please enter your start location">
-				<label class="simple" for="destination_addresses">End</label>
-				<input type="text" name="destination_addresses" placeholder="Please enter your end location">
+    <section class="userInput" id="userInput">
+        <div class="wrapper">
+            <div class="greeting"></div>
+            <form class="calculateCommuterTime">
+                <p class="instructions">Please enter your start and end address (e.g. 483 Queen St West Toronto ON).</p>
+                <label class="simple" for="origin_addresses">Start</label>
+                <input type="text" name="origin_addresses" placeholder="Please enter your start location">
+                <label class="simple" for="destination_addresses">End</label>
+                <input type="text" name="destination_addresses" placeholder="Please enter your end location">
 
-				<p>What is your mode of transportation?</p>
-				<fieldset>
-					<input type="radio" name="mode" value="walking" id="walking" checked>
-					<label for="walking">Walking
+                <p>What is your mode of transportation?</p>
+                <fieldset>
+                    <input type="radio" name="mode" value="walking" id="walking" checked>
+                    <label for="walking">Walking
 						<i class="fa fa-male" aria-hidden="true"></i>
 					</label>
 
-					<input type="radio" name="mode" value="driving" id="driving">
-					<label for="driving">Driving 
+                    <input type="radio" name="mode" value="driving" id="driving">
+                    <label for="driving">Driving 
 						<i class="fa fa-car" aria-hidden="true"></i>
 					</label>
 
-					<!-- <input type="radio" name="mode" value="bicycling" id="bicycling">
+                    <!-- <input type="radio" name="mode" value="bicycling" id="bicycling">
 					<label for="bicycling">Bicycling
 						<i class="fa fa-bicycle" aria-hidden="true"></i>
 					</label> -->
 
-					<input type="radio" name="mode" value="transit" id="transit">
-					<label for="transit">Transit
+                    <input type="radio" name="mode" value="transit" id="transit">
+                    <label for="transit">Transit
 						<i class="fa fa-bus" aria-hidden="true"></i>
 					</label>
 
-					<input type="submit" value="calculate my commute time">
-				</fieldset>
-			</form>
+                    <input type="submit" value="calculate my commute time">
+                </fieldset>
+            </form>
 
-			<!-- PLAYLIST FORM STARTS -->
-			<form action="" class="createPlaylist">
-				<p class="instruction">Please select up to 5 genres!</p>
+            <!-- PLAYLIST FORM STARTS -->
+            <form class="createPlaylist">
+                <p class="instruction">Please select up to 5 genres!</p>
 
-				<fieldset>
-					
-				<input type="checkbox" name="genre" value="pop" id="pop">
-				<label for="pop">Pop</label>
+                <fieldset>
 
-				<input type="checkbox" name="genre" value="rock" id="rock">
-				<label for="rock">Rock</label>
+                    <input type="checkbox" name="genre" value="pop" id="pop">
+                    <label for="pop">Pop</label>
 
-				<input type="checkbox" name="genre" value="hipHop" id="hipHop">
-				<label for="hipHop">Hip-Hop</label>
+                    <input type="checkbox" name="genre" value="rock" id="rock">
+                    <label for="rock">Rock</label>
 
-				<input type="checkbox" name="genre" value="rap" id="rap">
-				<label for="rap">Rap</label>
+                    <input type="checkbox" name="genre" value="hipHop" id="hipHop">
+                    <label for="hipHop">Hip-Hop</label>
 
-				<input type="checkbox" name="genre" value="popRap" id="popRap">
-				<label for="popRap">Pop Rap</label>
+                    <input type="checkbox" name="genre" value="rap" id="rap">
+                    <label for="rap">Rap</label>
 
-				<input type="checkbox" name="genre" value="r&b" id="r&b">
-				<label for="r&b">R&B</label>
+                    <input type="checkbox" name="genre" value="popRap" id="popRap">
+                    <label for="popRap">Pop Rap</label>
 
-				<input type="checkbox" name="genre" value="country" id="country">
-				<label for="country">Country</label>
-				
-				<input type="checkbox" name="genre" value="blues" id="blues">
-				<label for="blues">Blues</label>
+                    <input type="checkbox" name="genre" value="r&b" id="r&b">
+                    <label for="r&b">R&B</label>
 
-				<input type="checkbox" name="genre" value="jazz" id="jazz">
-				<label for="jazz">Jazz</label>
-					
-				<input type="checkbox" name="genre" value="indiePop" id="indiePop">
-				<label for="indiePop">Indie Pop</label>
+                    <input type="checkbox" name="genre" value="country" id="country">
+                    <label for="country">Country</label>
 
-				<input type="checkbox" name="genre" value="indieRock" id="indieRock">
-				<label for="indieRock">Indie Rock</label>
+                    <input type="checkbox" name="genre" value="blues" id="blues">
+                    <label for="blues">Blues</label>
 
-				<input type="checkbox" name="genre" value="folk" id="folk">
-				<label for="folk">Folk</label>
+                    <input type="checkbox" name="genre" value="jazz" id="jazz">
+                    <label for="jazz">Jazz</label>
 
-				<input type="checkbox" name="genre" value="edm" id="edm">
-				<label for="edm">EDM</label>
-				
-				<input type="submit" value ="make me my playlist">
+                    <input type="checkbox" name="genre" value="indiePop" id="indiePop">
+                    <label for="indiePop">Indie Pop</label>
 
-				</fieldset>
+                    <input type="checkbox" name="genre" value="indieRock" id="indieRock">
+                    <label for="indieRock">Indie Rock</label>
 
-			</form>
-		</div> <!-- /.wrapper -->
-	</section>
+                    <input type="checkbox" name="genre" value="folk" id="folk">
+                    <label for="folk">Folk</label>
+
+                    <input type="checkbox" name="genre" value="edm" id="edm">
+                    <label for="edm">EDM</label>
+
+                    <input type="submit" value="make me my playlist">
+
+                </fieldset>
+
+            </form>
+        </div>
+        <!-- /.wrapper -->
+    </section>
 
     <!--PLAYLIST WIDGET-->
-   <section class="customizedPlaylist">
-		<div class="wrapper clearfix">
-			<div class="spotifyWidget">
-			</div>
-		</div>
-	</section>
+    <section class="customizedPlaylist">
+        <div class="wrapper clearfix">
+            <div class="spotifyWidget">
+            </div>
+        </div>
+    </section>
 
     <!--FOOTER BEGINS-->
     <footer>
-
+        <p>Developed by
+            <a class="simple" href="https://twitter.com/_jennyngo">Jenny Ngo</a>
+            <span class="responsive">
+			with 
+			<a href="https://developer.spotify.com/web-api/" class="simple">Spotify API</a>
+			&
+			<a class="simple" href="https://developers.google.com/maps/documentation/distance-matrix/">Google Maps DM API</a>
+			</span>
+        </p>
+        <p class="userMessage">graphics made by these awesome <a class="simple" href="credits.html">humans</a></p>
     </footer>
     <!--links to scripts-->
-    <script
-        src="http://code.jquery.com/jquery-3.2.1.min.js"
-        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
         crossorigin="anonymous">
-    </script>
+
+        </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCLJ08ZwZQxt2drHuOAAbkQCAo8qzSlsE"></script>
     <!--links to templates-->
     <script id="loggedInTemplate" type="x-handlebars-template">
-        <a href="#userInput" class="btn animated infinite pulse">Let's get started <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
-	    <p class="userMessage">You are logged in as {{id}}</p>
+        <a id="getStarted" class="btn animated infinite pulse">Let's get started <i class="fa fa-angle-double-down" aria-hidden="true"></i></a>
+        <p class="userMessage">You are logged in as {{id}}</p>
     </script>
     <script src="scripts/main.js"></script>
 </body>
+
 </html>

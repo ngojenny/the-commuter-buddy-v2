@@ -104,6 +104,9 @@ commuterApp.handleCommuteData = function (res, stat) {
         $('.userInput .calculateCommuterTime').append(timeResultMarkup);
         //make .createPlaylist appear
         $('.createPlaylist').addClass('show');
+        $('html, body').animate({
+            scrollTop: $('.createPlaylist').offset().top
+        }, 1000);
     }
 };
 
@@ -288,7 +291,7 @@ commuterApp.displayWidget = function () {
     var playlistId = commuterApp.playlistInfo.id;
     console.log('what else', commuterApp.playlistInfo);
     var userId = commuterApp.userInfo.id;
-    var widgetMarkup = '<iframe src="https://open.spotify.com/embed?uri=spotify:user:' + userId + ':playlist:' + playlistId + '" width="300" height="530" frameborder="0" allowtransparency="true"></iframe>';
+    var widgetMarkup = '<iframe src="https://open.spotify.com/embed?uri=spotify:user:' + userId + ':playlist:' + playlistId + '" width="300" height="525" frameborder="0" allowtransparency="true"></iframe>';
     var iphoneMarkup = '<img src="images/iphone2.svg" alt="illustration of white iPhone"/>';
 
     $('.spotifyWidget').empty();
@@ -300,6 +303,11 @@ commuterApp.displayWidget = function () {
     $('.customizedPlaylist .btn').remove();
     $('.customizedPlaylist .goodbye').remove();
     $('.customizedPlaylist .wrapper').append(thanksMarkup, refreshButton);
+
+    $('html, body').animate({
+        scrollTop: $('.customizedPlaylist').offset().top
+    }, 1000);
+
     $('.customizedPlaylist button').on('click', function () {
         location.reload();
     });
@@ -330,7 +338,6 @@ $(document).ready(function () {
                 success: function success(response) {
                     console.log('response successful', response);
                     var loggedInTemplateUser = template(response);
-
                     // store userInfo for later
                     commuterApp.userInfo = response;
                     $('#login').hide();
@@ -339,6 +346,13 @@ $(document).ready(function () {
                     $('footer, #userInput').addClass('show');
                     $('#loggedIn').append(loggedInTemplateUser);
                     commuterApp.greetUser();
+
+                    $('#getStarted').on('click', function (e) {
+                        e.preventDefault();
+                        $('html, body').animate({
+                            scrollTop: $('#userInput').offset().top
+                        }, 1000);
+                    });
                 },
                 error: function error(err) {
                     console.log('there was an error');
