@@ -1,12 +1,7 @@
 const commuterApp = {}
 let accessToken;
 
-// SET ACCESS TOKEN FOR SPOTIFY
-
-commuterApp.getTokenObj = () => {
-    commuterApp.directSpotify()
-}
-
+// COMMUTER HELPER FUNCTIONS 
 commuterApp.generateRandomString = (length) => {
     let text = '';
     let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -17,6 +12,13 @@ commuterApp.generateRandomString = (length) => {
     // console.log('text', text)
     return text;
 }
+
+// SET ACCESS TOKEN FOR SPOTIFY
+
+commuterApp.getTokenObj = () => {
+    commuterApp.directSpotify()
+}
+
 
 commuterApp.directSpotify = () => {
     console.log('reached direct spotify')
@@ -120,7 +122,7 @@ commuterApp.createPlaylist = () => {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + accessToken,
         },
-        data: JSON.stringify({name: 'The Commuter Buddy'}),
+        data: JSON.stringify({ name: 'The Commuter Buddy' }),
         success: function (res) {
             console.log('success', res)
             // store playlistInfo for later
@@ -175,19 +177,9 @@ commuterApp.getArtists = (genres) => {
             let artistsIds = [];
 
             if (res.length) {
-                artistsIds = artistsArray.map((arr, i) => {
-                    return arr[0].artists.items;
-                });
-
-                artistsIds = artistsIds.reduce(function(a,b){
-                    return a.concat(b);
-                }, []);
-
-                console.log('randomized', artistsIds.sort(() => { return 0.5 - Math.random() }));
-
-                artistsIds = artistsIds.map((arr, i) => {
-                    return arr.id;
-                });
+                artistsIds = artistsArray.map((arr, i) => { return arr[0].artists.items; })
+                    .reduce(function (a, b) { return a.concat(b); }, [])
+                    .map((arr, i) => { return arr.id; });
 
             } else {
                 console.log('JUST ONE')
@@ -199,17 +191,86 @@ commuterApp.getArtists = (genres) => {
             console.log('artistsIds', artistsIds);
 
             // commuterApp.randomizeArtists(artistsIds);
+            commuterApp.getTopTracks(artistsIds);
 
         });
     console.log('getting artists');
 }
 
-// commuterApp.randomizeArtists = (ids) => {
-//     console.log('ids', ids)
-//     const randomizedIds  = ids.sort(() => { return 0.5 - Math.random() })
-//     console.log('randomizedIds', randomizedIds);
+commuterApp.getTopTracks = (ids) => {
+    console.log('about to search', accessToken)
+    const getTracks = ids.map((id) => {
+        return $.ajax({
+            url: `https://api.spotify.com/v1/artists/${id}/top-tracks`,
+            dataType: 'json',
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + accessToken,
+            },
+            data: {
+                country: 'CA',
+                type: 'track'
+            }
+        });
+    });
 
-// }
+    $.when.apply(null, getTracks)
+        .then(function (res) {
+            // get artists ids
+            const tracksArray = Array.from(arguments);
+
+            if (tracksArray) {
+                commuterApp.massageTracks(tracksArray);
+            }
+
+        });
+}
+
+commuterApp.massageTracks = (tracks) => {
+    tracks = tracks.map((track, i) => { return track[0].tracks; })
+        .reduce((a, b) => { return a.concat(b); }, [])
+    console.log('massage tracks', tracks);
+    commuterApp.randomizeTracks(tracks);
+}
+
+commuterApp.randomizeTracks = (tracks) => {
+    const randomizedTracks = tracks.sort(() => { return 0.5 - Math.random() })
+    console.log('randomizedtracks', randomizedTracks);
+    commuterApp.buildTracksList(randomizedTracks);
+}
+
+commuterApp.buildTracksList = (tracks) => {
+    let leftOverCommuteTime = commuterApp.commuteTime;
+    const playlistTracks = [];
+    tracks.forEach((track, i) => {
+        if (leftOverCommuteTime >= 1) {
+            playlistTracks.push(track)
+            leftOverCommuteTime -= track.duration_ms;
+        }
+    });
+
+    const playlistUris = playlistTracks.map((track) => { return track.uri });
+    commuterApp.buildPlaylist(playlistUris);
+}
+
+commuterApp.buildPlaylist = (uris) => {
+    console.log('tracks', uris);
+    console.log('commuterApp', commuterApp);
+    const playlistId = commuterApp.playlistInfo.id;
+    const userId = commuterApp.userInfo.id;
+    $.ajax({
+        url: `https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`,
+        dataType: 'json',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken,
+        },
+        data: JSON.stringify({ uris: uris })
+    });
+}
+
 
 
 $(document).ready(function () {
