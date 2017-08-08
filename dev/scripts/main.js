@@ -267,8 +267,37 @@ commuterApp.buildPlaylist = (uris) => {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + accessToken,
         },
-        data: JSON.stringify({ uris: uris })
+        data: JSON.stringify({ uris: uris }),
+        success: function (res) {
+            console.log('what is res', res);
+            commuterApp.displayWidget()
+        },
+        error: function (err) {
+            console.log('there was an error', err);
+        } 
     });
+}
+
+commuterApp.displayWidget = () => {
+    console.log('you are called');
+    const playlistId = commuterApp.playlistInfo.id;
+    console.log('what else', commuterApp.playlistInfo);
+    const userId = commuterApp.userInfo.id;
+    const widgetMarkup = `<iframe src="https://open.spotify.com/embed?uri=spotify:user:${userId}:playlist:${playlistId}" width="300" height="530" frameborder="0" allowtransparency="true"></iframe>`
+    const iphoneMarkup = `<img src="images/iphone2.svg" alt="illustration of white iPhone"/>`
+
+    $('.spotifyWidget').empty();
+	$('.spotifyWidget').append(iphoneMarkup, widgetMarkup);
+    const thanksMarkup = `<h3 class="goodbye">Thanks for using the Commuter Buddy</h3>`;
+
+	const refreshButton = `<button class="btn">One more time!</button>`;
+
+	$('.customizedPlaylist .btn').remove();
+	$('.customizedPlaylist .goodbye').remove();
+	$('.customizedPlaylist .wrapper').append(thanksMarkup, refreshButton);
+	$('.customizedPlaylist button').on('click', function(){
+		location.reload();
+	});
 }
 
 
