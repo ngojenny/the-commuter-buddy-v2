@@ -9,7 +9,6 @@ commuterApp.generateRandomString = (length) => {
     for (var i = 0; i < length; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
-    // console.log('text', text)
     return text;
 }
 
@@ -21,7 +20,6 @@ commuterApp.getTokenObj = () => {
 
 
 commuterApp.directSpotify = () => {
-    console.log('reached direct spotify')
     const client_id = '0799860bd8cb460bbfe7ddeefa8e73d2'
     const redirect_uri = 'http://localhost:3000'
     const state = commuterApp.generateRandomString(5);
@@ -74,9 +72,7 @@ commuterApp.greetUser = () => {
 
 // TAKE USER INPUT AND CALCULATE COMMUTE TIME
 commuterApp.getCommuteData = (start, end, mode) => {
-    console.log('call google', start, end, mode)
     const service = new google.maps.DistanceMatrixService();
-    console.log('distanceSerice', service)
 
     service.getDistanceMatrix(
         {
@@ -95,7 +91,6 @@ commuterApp.handleCommuteData = (res, stat) => {
         let durationVal = res.rows[0].elements[0].duration.value;
         // convert durationVal to milliseconds to use for later
         commuterApp.commuteTime = Math.round(durationVal * 1000);
-        console.log('commutertime', commuterApp.commuteTime);
 
         const timeResultMarkup = `
         <div class="commuteTimeResults">
@@ -114,9 +109,7 @@ commuterApp.handleCommuteData = (res, stat) => {
 
 //CREATE A NEW PLAYLIST
 commuterApp.createPlaylist = () => {
-    console.log('createPlaylist')
     const userId = commuterApp.userInfo.id;
-    console.log('user', userId);
     $.ajax({
         url: `https://api.spotify.com/v1/users/${userId}/playlists`,
         dataType: 'json',
@@ -142,15 +135,12 @@ commuterApp.createPlaylist = () => {
 // collect genres chosen by user; output: array ['pop', 'rock']
 commuterApp.collectGenres = () => {
     const genresElems = [...document.querySelectorAll('.createPlaylist input:checked')];
-    console.log('genresElem', genresElems);
     const genres = genresElems.map((genresElem, i) => { return genresElem.value });
-    console.log('genres', genres);
     commuterApp.getArtists(genres);
 }
 
 // get 20 top artists per genre chosen
 commuterApp.getArtists = (genres) => {
-    console.log('about to search', accessToken)
     const getArtists = genres.map(function (genre) {
         return $.ajax({
             url: 'https://api.spotify.com/v1/search',
@@ -185,23 +175,16 @@ commuterApp.getArtists = (genres) => {
                     .map((arr, i) => { return arr.id; });
 
             } else {
-                console.log('JUST ONE')
                 artistsIds = artistsArray[0].artists.items.map((artist, i) => {
                     return artist.id;
                 });
             }
-
-            console.log('artistsIds', artistsIds);
-
-            // commuterApp.randomizeArtists(artistsIds);
             commuterApp.getTopTracks(artistsIds);
 
         });
-    console.log('getting artists');
 }
 
 commuterApp.getTopTracks = (ids) => {
-    console.log('about to search', accessToken)
     const getTracks = ids.map((id) => {
         return $.ajax({
             url: `https://api.spotify.com/v1/artists/${id}/top-tracks`,
@@ -232,14 +215,12 @@ commuterApp.getTopTracks = (ids) => {
 
 commuterApp.massageTracks = (tracks) => {
     tracks = tracks.map((track, i) => { return track[0].tracks; })
-        .reduce((a, b) => { return a.concat(b); }, [])
-    console.log('massage tracks', tracks);
+        .reduce((a, b) => { return a.concat(b); }, []);
     commuterApp.randomizeTracks(tracks);
 }
 
 commuterApp.randomizeTracks = (tracks) => {
-    const randomizedTracks = tracks.sort(() => { return 0.5 - Math.random() })
-    console.log('randomizedtracks', randomizedTracks);
+    const randomizedTracks = tracks.sort(() => { return 0.5 - Math.random() });
     commuterApp.buildTracksList(randomizedTracks);
 }
 
@@ -258,8 +239,6 @@ commuterApp.buildTracksList = (tracks) => {
 }
 
 commuterApp.buildPlaylist = (uris) => {
-    console.log('tracks', uris);
-    console.log('commuterApp', commuterApp);
     const playlistId = commuterApp.playlistInfo.id;
     const userId = commuterApp.userInfo.id;
     $.ajax({
@@ -282,9 +261,7 @@ commuterApp.buildPlaylist = (uris) => {
 }
 
 commuterApp.displayWidget = () => {
-    console.log('you are called');
     const playlistId = commuterApp.playlistInfo.id;
-    console.log('what else', commuterApp.playlistInfo);
     const userId = commuterApp.userInfo.id;
     const widgetMarkup = `<iframe src="https://open.spotify.com/embed?uri=spotify:user:${userId}:playlist:${playlistId}" width="300" height="525" frameborder="0" allowtransparency="true"></iframe>`
     const iphoneMarkup = `<img src="images/iphone2.svg" alt="illustration of white iPhone"/>`
@@ -385,8 +362,6 @@ $(document).ready(function () {
 
     $('form.createPlaylist').on('submit', (e) => {
         e.preventDefault();
-        console.log('submitting');
-        // commuterApp.collectGenres();
         commuterApp.createPlaylist();
     });
 

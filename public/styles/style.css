@@ -283,6 +283,9 @@ header {
     padding: 5px;
     margin: 10px; }
 
+#getStarted {
+  cursor: pointer; }
+
 @-webkit-keyframes path {
   0% {
     bottom: 30%;
@@ -428,7 +431,8 @@ fieldset {
     width: 85%;
     position: absolute;
     top: 13%;
-    left: 8%; }
+    left: 8%;
+    max-height: 72%; }
   .customizedPlaylist h3 {
     float: left;
     width: calc(60% - 50px);

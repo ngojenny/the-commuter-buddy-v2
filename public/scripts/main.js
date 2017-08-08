@@ -13,7 +13,6 @@ commuterApp.generateRandomString = function (length) {
     for (var i = 0; i < length; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
-    // console.log('text', text)
     return text;
 };
 
@@ -24,7 +23,6 @@ commuterApp.getTokenObj = function () {
 };
 
 commuterApp.directSpotify = function () {
-    console.log('reached direct spotify');
     var client_id = '0799860bd8cb460bbfe7ddeefa8e73d2';
     var redirect_uri = 'http://localhost:3000';
     var state = commuterApp.generateRandomString(5);
@@ -76,9 +74,7 @@ commuterApp.greetUser = function () {
 
 // TAKE USER INPUT AND CALCULATE COMMUTE TIME
 commuterApp.getCommuteData = function (start, end, mode) {
-    console.log('call google', start, end, mode);
     var service = new google.maps.DistanceMatrixService();
-    console.log('distanceSerice', service);
 
     service.getDistanceMatrix({
         origins: [start],
@@ -96,7 +92,6 @@ commuterApp.handleCommuteData = function (res, stat) {
         var durationVal = res.rows[0].elements[0].duration.value;
         // convert durationVal to milliseconds to use for later
         commuterApp.commuteTime = Math.round(durationVal * 1000);
-        console.log('commutertime', commuterApp.commuteTime);
 
         var timeResultMarkup = '\n        <div class="commuteTimeResults">\n            <p class="commuteTimeMin">Your commute will take ' + durationText + '</p>\n        </div>';
 
@@ -112,9 +107,7 @@ commuterApp.handleCommuteData = function (res, stat) {
 
 //CREATE A NEW PLAYLIST
 commuterApp.createPlaylist = function () {
-    console.log('createPlaylist');
     var userId = commuterApp.userInfo.id;
-    console.log('user', userId);
     $.ajax({
         url: 'https://api.spotify.com/v1/users/' + userId + '/playlists',
         dataType: 'json',
@@ -139,17 +132,14 @@ commuterApp.createPlaylist = function () {
 // collect genres chosen by user; output: array ['pop', 'rock']
 commuterApp.collectGenres = function () {
     var genresElems = [].concat(_toConsumableArray(document.querySelectorAll('.createPlaylist input:checked')));
-    console.log('genresElem', genresElems);
     var genres = genresElems.map(function (genresElem, i) {
         return genresElem.value;
     });
-    console.log('genres', genres);
     commuterApp.getArtists(genres);
 };
 
 // get 20 top artists per genre chosen
 commuterApp.getArtists = function (genres) {
-    console.log('about to search', accessToken);
     var getArtists = genres.map(function (genre) {
         return $.ajax({
             url: 'https://api.spotify.com/v1/search',
@@ -186,22 +176,15 @@ commuterApp.getArtists = function (genres) {
                 return arr.id;
             });
         } else {
-            console.log('JUST ONE');
             artistsIds = artistsArray[0].artists.items.map(function (artist, i) {
                 return artist.id;
             });
         }
-
-        console.log('artistsIds', artistsIds);
-
-        // commuterApp.randomizeArtists(artistsIds);
         commuterApp.getTopTracks(artistsIds);
     });
-    console.log('getting artists');
 };
 
 commuterApp.getTopTracks = function (ids) {
-    console.log('about to search', accessToken);
     var getTracks = ids.map(function (id) {
         return $.ajax({
             url: 'https://api.spotify.com/v1/artists/' + id + '/top-tracks',
@@ -234,7 +217,6 @@ commuterApp.massageTracks = function (tracks) {
     }).reduce(function (a, b) {
         return a.concat(b);
     }, []);
-    console.log('massage tracks', tracks);
     commuterApp.randomizeTracks(tracks);
 };
 
@@ -242,7 +224,6 @@ commuterApp.randomizeTracks = function (tracks) {
     var randomizedTracks = tracks.sort(function () {
         return 0.5 - Math.random();
     });
-    console.log('randomizedtracks', randomizedTracks);
     commuterApp.buildTracksList(randomizedTracks);
 };
 
@@ -263,8 +244,6 @@ commuterApp.buildTracksList = function (tracks) {
 };
 
 commuterApp.buildPlaylist = function (uris) {
-    console.log('tracks', uris);
-    console.log('commuterApp', commuterApp);
     var playlistId = commuterApp.playlistInfo.id;
     var userId = commuterApp.userInfo.id;
     $.ajax({
@@ -287,9 +266,7 @@ commuterApp.buildPlaylist = function (uris) {
 };
 
 commuterApp.displayWidget = function () {
-    console.log('you are called');
     var playlistId = commuterApp.playlistInfo.id;
-    console.log('what else', commuterApp.playlistInfo);
     var userId = commuterApp.userInfo.id;
     var widgetMarkup = '<iframe src="https://open.spotify.com/embed?uri=spotify:user:' + userId + ':playlist:' + playlistId + '" width="300" height="525" frameborder="0" allowtransparency="true"></iframe>';
     var iphoneMarkup = '<img src="images/iphone2.svg" alt="illustration of white iPhone"/>';
@@ -388,8 +365,6 @@ $(document).ready(function () {
 
     $('form.createPlaylist').on('submit', function (e) {
         e.preventDefault();
-        console.log('submitting');
-        // commuterApp.collectGenres();
         commuterApp.createPlaylist();
     });
 });
