@@ -23,7 +23,7 @@ commuterApp.getTokenObj = function () {
 };
 
 commuterApp.directSpotify = function () {
-    var client_id = '0799860bd8cb460bbfe7ddeefa8e73d2';
+    var client_id = '';
     var redirect_uri = 'http://localhost:3000';
     var state = commuterApp.generateRandomString(5);
     var stateKey = 'spotify_auth_state';
